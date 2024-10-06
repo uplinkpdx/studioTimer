@@ -1,0 +1,187 @@
+/* Default (Dark Theme) */
+:root {
+    --bg-color: #1e1e1e;
+    --text-color: #ffffff;
+    --button-bg-color: #333;
+    --button-text-color: #ffffff;
+    --section-bg-color: #1c1c1c;
+    --section-border-color-countdown: #f44336; /* Red border for countdown */
+    --section-border-color-countup: #4caf50;   /* Green border for countup */
+}
+
+/* Light Theme */
+.light-theme {
+    --bg-color: #ffffff;
+    --text-color: #000000;
+    --button-bg-color: #ddd;
+    --button-text-color: #000000;
+    --section-bg-color: #f0f0f0;
+    --section-border-color-countdown: #d32f2f; /* Lighter red border */
+    --section-border-color-countup: #81c784;   /* Lighter green border */
+}
+
+/* General Settings */
+body {
+    font-family: Arial, sans-serif;
+    font-size: 18px;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    margin: 20px;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+}
+
+h2 {
+    font-size: 1.5em;
+    margin-bottom: 15px;
+    text-align: center; /* Center the titles */
+}
+
+/* Countdown Section */
+#countdown-section {
+    background-color: var(--section-bg-color);
+    padding: 20px;
+    border-radius: 15px;
+    margin-bottom: 20px;
+    border: 3px solid var(--section-border-color-countdown);
+    width: 100%;
+    max-width: 500px;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center the content */
+    justify-content: center;
+}
+
+#countdown-section h2 {
+    color: var(--section-border-color-countdown);
+}
+
+#countdown-section input {
+    font-size: 24px;
+    padding: 10px;
+    width: 80px;
+    background-color: #333;
+    color: var(--text-color);
+    border: none;
+    border-radius: 5px;
+    text-align: center; /* Center text in input */
+}
+
+.time-input {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    margin-bottom: 15px; /* Add spacing between input and buttons */
+}
+
+/* Countdown Buttons */
+#countdown-section button {
+    background-color: var(--section-border-color-countdown);
+    color: var(--button-text-color);
+    width: 80%; /* Adjust width for better centering */
+}
+
+/* Countup Section */
+#countup-section {
+    background-color: var(--section-bg-color);
+    padding: 20px;
+    border-radius: 15px;
+    margin-bottom: 20px;
+    border: 3px solid var(--section-border-color-countup);
+    width: 100%;
+    max-width: 500px;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center the content */
+    justify-content: center;
+}
+
+#countup-section h2 {
+    color: var(--section-border-color-countup);
+}
+
+/* Countup Buttons */
+#countup-section button {
+    background-color: var(--section-border-color-countup);
+    color: var(--button-text-color);
+    width: 80%; /* Adjust width for better centering */
+}
+
+/* For both sections */
+button {
+    font-size: 20px;
+    padding: 15px 25px;
+    border: none;
+    border-radius: 8px;
+    margin: 10px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+button:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Hover effects for Countdown and Countup Buttons */
+#countdown-section button:hover {
+    background-color: var(--section-border-color-countdown);
+}
+
+#countup-section button:hover {
+    background-color: var(--section-border-color-countup);
+}
+
+/* Responsive layout */
+@media (max-width: 768px) {
+    h2 {
+        font-size: 1.2em;
+    }
+
+    button {
+        font-size: 18px;
+        padding: 12px 20px;
+    }
+
+    .time-input {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        width: 100%;
+    }
+
+    #countdown-section input {
+        font-size: 24px;
+        width: 90px; /* Increase input size for mobile */
+        text-align: center;
+    }
+
+    #countdown-section, #countup-section {
+        max-width: 100%;
+        width: 90%;
+    }
+}
+
+/* Larger screens (tablets and above) */
+@media (min-width: 1024px) {
+    button {
+        font-size: 22px;
+        padding: 20px 40px;
+        width: auto;
+    }
+
+    #countdown-section input {
+        font-size: 28px;
+        width: 100px;
+    }
+
+    .container {
+        gap: 30px;
+    }
+}

@@ -1,0 +1,133 @@
+/* General Settings */
+body {
+    font-family: 'DSEG', sans-serif;  /* Assuming DSEG font is used */
+    margin: 0;
+    background-color: black;  /* Black background for display */
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100vw;  /* Full viewport width */
+}
+
+/* Container to hold everything in center */
+.container {
+    text-align: center;
+    width: 90%;  /* Take most of the screen width */
+    max-width: 1600px;  /* Larger width for widescreen monitors */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;  /* Space elements evenly */
+    align-items: center; /* Ensure elements remain centered */
+    height: 90vh;  /* Take up most of the screen height */
+    gap: 2vh;  /* Add some spacing between timers */
+}
+
+/* Countdown Timer */
+#countdown-timer {
+    font-size: 10vw;  /* Scale countdown font size with screen width */
+    font-weight: bold;
+    color: white;
+}
+
+/* Countdown Timer Bar */
+.bar {
+    height: 60px;  /* Maintain the original bar height */
+    min-height: 40px; /* Ensure bars never disappear */
+    width: 100%;
+    background-color: green;  /* Initial color */
+    margin: 10px 0;
+}
+
+/* Countup Timer */
+#countup-timer {
+    font-size: 6vw;  /* Adjust font size for the countup display */
+    color: orange;
+    text-align: center;
+}
+
+
+/* Real-time Clock */
+#current-time {
+    font-size: 5vw;  /* Scale down a bit more for smaller screens */
+    font-weight: bold;
+    color: red;  /* Red color for the time text */
+    background-color: black;  /* Black background for the box */
+    border: 4px solid white;  /* White border around the box */
+    padding: 20px;
+    border-radius: 10px;  /* Rounded corners for the box */
+    display: inline-block;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);  /* Subtle shadow for depth */
+    max-width: 90%;  /* Prevent the box from being too wide */
+    text-align: center;  /* Ensure the time inside the box is centered */
+    margin: 0 auto;  /* Ensure the box is centered on the screen */
+}
+
+/* Animation for yellow pulse */
+@keyframes pulse {
+    0% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+/* Apply the pulse animation when the bar is yellow */
+.pulse {
+    animation: pulse 1s infinite;
+}
+
+/* Flashing effect for countdown timer */
+@keyframes flash {
+    0% { opacity: 1; }
+    50% { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+.flash {
+    animation: flash 1s infinite;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 1200px) {
+    #countdown-timer {
+        font-size: 9vw;
+    }
+
+    #countup-timer {
+        font-size: 7vw;
+    }
+
+    #current-time {
+        font-size: 4.5vw;
+        padding: 15px;
+    }
+
+    .bar {
+        height: 50px; /* Adjust the bar height for smaller screens */
+    }
+}
+
+@media (max-width: 768px) {
+    #countdown-timer {
+        font-size: 8vw;
+    }
+
+    #countup-timer {
+        font-size: 6vw;
+    }
+
+    #current-time {
+        font-size: 4vw;
+        padding: 10px;
+    }
+
+    .bar {
+        height: 40px;  /* Minimum height for bars on small screens */
+    }
+}

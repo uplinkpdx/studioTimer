@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Studio Timer Control Panel</title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="control-style.css">
+
+</head>
+<body>
+    <div class="container">
+        <!-- Countdown Section -->
+        <div id="countdown-section">
+            <h2>Countdown Timer</h2>
+            <div class="time-input">
+                <input id="minutes" type="number" placeholder="MM" min="0" max="59">
+                <span>:</span>
+                <input id="seconds" type="number" placeholder="SS" min="0" max="59">
+            </div>
+            <button onclick="setCountdown()">SET</button>
+            <button onclick="startCountdown()">START</button>
+            <button onclick="resetCountdown()">RESET</button>
+        </div>
+
+        <!-- Countup Section -->
+        <div id="countup-section">
+            <h2>Duration Timer</h2>
+            <button onclick="startCountup()">START</button>
+            <button onclick="pauseCountup()">PAUSE</button>
+            <button onclick="resetCountup()">RESET</button>
+        </div>
+        
+        <!-- Theme Mode Button -->
+        <div id="mode-button">
+        <button id="theme-toggle">Switch to Light Mode</button>
+        </div>
+    </div>
+
+
+
+    <script src="control.js"></script>
+    <script src="theme.js"></script>
+    
+    
+</body>
+</html>
