@@ -1,23 +1,29 @@
-const socket = new WebSocket('ws://192.168.1.61:3000');
+const websocketPort = '3000'; // WebSocket server port
+const wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
 
 let countupInterval;
 let countdownInterval;
 let isCountupRunning = false;
 
-// WebSocket connection opened
-socket.onopen = function() {
-    console.log('WebSocket connection established');
+// Placeholder for WebSocket server IP, replaced during installation
+const websocketURL = `${wsProtocol}//%%WEBSOCKET_SERVER_IP%%:${websocketPort}`;
+
+// Create a WebSocket connection
+const ws = new WebSocket(websocketURL);
+
+// WebSocket event listeners
+ws.onopen = () => {
+  console.log('WebSocket connection opened.');
 };
 
-// WebSocket connection error
-socket.onerror = function(error) {
-    console.error('WebSocket error:', error);
+ws.onmessage = (event) => {
+  console.log('Message from server:', event.data);
 };
 
-// WebSocket connection closed
-socket.onclose = function(event) {
-    console.log('WebSocket connection closed:', event);
+ws.onclose = () => {
+  console.log('WebSocket connection closed.');
 };
+
 
 // Handle incoming WebSocket messages
 socket.onmessage = function (event) {

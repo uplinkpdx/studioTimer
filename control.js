@@ -1,4 +1,9 @@
-const socket = new WebSocket('ws://192.168.1.61:3000');
+const websocketPort = '3000';
+const wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+const websocketURL = `${wsProtocol}//%%WEBSOCKET_SERVER_IP%%:${websocketPort}`;
+
+// Create WebSocket connection
+const ws = new WebSocket(websocketURL);
 
 // Send updated countdown or countup data to the WebSocket server
 function updateTimer(type, data) {
@@ -44,12 +49,15 @@ function resetCountup() {
     updateTimer('countup', { status: 'resetAndRun' });
 }
 
-// WebSocket connection opened
-socket.onopen = function() {
-    console.log('WebSocket connection established from control page');
+// WebSocket event listeners
+ws.onopen = () => {
+  console.log('WebSocket connection opened.');
 };
 
-// WebSocket error handling
-socket.onerror = function(error) {
-    console.error('WebSocket error:', error);
+ws.onmessage = (event) => {
+  console.log('Message from server:', event.data);
+};
+
+ws.onclose = () => {
+  console.log('WebSocket connection closed.');
 };
