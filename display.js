@@ -13,20 +13,10 @@ const ws = new WebSocket(websocketURL);
 
 // WebSocket event listeners
 ws.onopen = () => {
-  console.log('WebSocket connection opened.');
+    console.log('WebSocket connection opened.');
 };
 
 ws.onmessage = (event) => {
-  console.log('Message from server:', event.data);
-};
-
-ws.onclose = () => {
-  console.log('WebSocket connection closed.');
-};
-
-
-// Handle incoming WebSocket messages
-socket.onmessage = function (event) {
     const data = JSON.parse(event.data);
     console.log('Received data on display page:', data);  // Check if data is received
 
@@ -40,7 +30,7 @@ socket.onmessage = function (event) {
     if (data.countup) {
         const { status, time } = data.countup;
         console.log('Received countup status:', status);  // Debug the countup status
-        console.log('Received countup time:', time);  // Debug the countup time
+        console.log('Received countup time:', time);      // Debug the countup time
 
         if (status === 'resetAndRun') {
             clearInterval(countupInterval);
@@ -62,16 +52,24 @@ socket.onmessage = function (event) {
     }
 };
 
+ws.onclose = () => {
+    console.log('WebSocket connection closed.');
+};
+
+ws.onerror = (error) => {
+    console.error('WebSocket error:', error);
+};
+
 // Start countup timer from a given time (synchronized with server)
 function startCountupFromServer(serverTime = 0) {
     console.log('Starting countup from server time:', serverTime);  // Debug start time
     let countupTime = serverTime;
     countupInterval = setInterval(() => {
         countupTime++;
-        
-        const hours = Math.floor(countupTime / 3600); // 3600 seconds in an hour
+
+        const hours = Math.floor(countupTime / 3600);    // 3600 seconds in an hour
         const minutes = Math.floor((countupTime % 3600) / 60); // Remaining minutes
-        const seconds = countupTime % 60; // Remaining seconds
+        const seconds = countupTime % 60;               // Remaining seconds
 
         // Display the time in HH:MM:SS format
         document.getElementById('countup-timer').innerText = 
@@ -80,7 +78,6 @@ function startCountupFromServer(serverTime = 0) {
         console.log('Countup time updated to:', hours, minutes, seconds);  // Debug time update
     }, 1000);
 }
-
 
 // Update countdown timer display
 function updateCountdownDisplay(minutes, seconds, status) {
@@ -103,7 +100,7 @@ function updateCountdownDisplay(minutes, seconds, status) {
         } else {
             countdownDisplay.innerText = `${minutes}:${seconds < 10 ? '0' + seconds : seconds}`;  // Normal minute:second format
         }
-        
+
         countdownDisplay.classList.remove('flash');  // Remove the flash class if not zero
     }
 
