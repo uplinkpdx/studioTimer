@@ -9,7 +9,7 @@ const ws = new WebSocket(websocketURL);
 function updateTimer(type, data) {
     const update = {};
     update[type] = data;
-    socket.send(JSON.stringify(update));
+    ws.send(JSON.stringify(update)); // Use ws instead of socket
     console.log('Sent message:', update);
 }
 
@@ -60,4 +60,8 @@ ws.onmessage = (event) => {
 
 ws.onclose = () => {
   console.log('WebSocket connection closed.');
+};
+
+ws.onerror = (error) => {
+  console.error('WebSocket error:', error);
 };
