@@ -108,9 +108,54 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
-# Set up WebSocket server to start on boot using cron
-echo "Setting up WebSocket server to start on boot..."
-(crontab -l ; echo "@reboot /usr/bin/node /var/www/html/server.js") | crontab -
+# Replace placeholders in JavaScript files with the dynamically determined WebSocket server IP
+echo "Replacing WebSocket placeholders with the actual server IP..."
+server_ip=$(hostname -I | awk '{print $1}')
+sed -i "s/%%WEBSOCKET_SERVER_IP%%/$server_ip/g" /var/www/html/*.js
+
+# Create systemd service for WebSocket server
+echo "Creating systemd service for WebSocket server..."
+sudo bash -c 'cat <<EOL > /etc/systemd/system/studioTimerWebSocket.service
+[Unit]
+Description=Studio Timer WebSocket Server
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/node /var/www/html/server.js
+Restart=always
+User=pi
+Environment=PATH=/usr/bin:/usr/local/bin
+WorkingDirectory=/var/www/html
+
+[Install]
+WantedBy=multi-user.target
+EOL'
+
+# Enable and start WebSocket server service
+sudo systemctl enable studioTimerWebSocket
+sudo systemctl start studioTimerWebSocket
+
+# Create systemd service for HTTP server
+echo "Creating systemd service for HTTP server..."
+sudo bash -c 'cat <<EOL > /etc/systemd/system/studioTimerHTTP.service
+[Unit]
+Description=Studio Timer HTTP Server
+After=network.target
+
+[Service]
+ExecStart=/usr/local/bin/http-server /var/www/html -p 8090
+Restart=always
+User=pi
+Environment=PATH=/usr/bin:/usr/local/bin
+WorkingDirectory=/var/www/html
+
+[Install]
+WantedBy=multi-user.target
+EOL'
+
+# Enable and start HTTP server service
+sudo systemctl enable studioTimerHTTP
+sudo systemctl start studioTimerHTTP
 
 # Set Chromium to start in kiosk mode at boot
 echo "Configuring Chromium to launch in kiosk mode on boot..."
@@ -121,14 +166,6 @@ Type=Application
 Name=Chromium Kiosk
 Exec=chromium-browser --kiosk http://localhost:8090/display.html
 EOL
-
-# Serve the control.html and display.html on port 8090
-echo "Starting HTTP server on port 8090 for both pages..."
-http-server /var/www/html -p 8090 &
-
-# Add HTTP server to startup using cron
-echo "Adding HTTP server to start on boot..."
-(crontab -l ; echo "@reboot http-server /var/www/html -p 8090") | crontab -
 
 echo "=============================================="
 echo "Installation complete! The Raspberry Pi will reboot shortly."
