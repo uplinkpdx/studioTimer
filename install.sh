@@ -12,8 +12,13 @@ HOSTNAME=${HOSTNAME:-timer-pi}
 echo "Setting hostname to $HOSTNAME..."
 sudo hostnamectl set-hostname "$HOSTNAME"
 
-# Update /etc/hosts with the new hostname
+# Update /etc/hosts to reflect the new hostname
+echo "Updating /etc/hosts to reflect the new hostname..."
 sudo sed -i "s/127.0.1.1 .*/127.0.1.1 $HOSTNAME/g" /etc/hosts
+
+# Confirm the changes made to /etc/hosts
+echo "Current /etc/hosts content:"
+cat /etc/hosts
 
 # Ensure avahi-daemon is installed and running for mDNS
 echo "Installing avahi-daemon for mDNS (hostname.local resolution)..."
@@ -30,9 +35,10 @@ echo "Installing Chromium browser..."
 sudo apt-get install -y chromium-browser
 
 # Create a directory for the project
-echo "Setting up project directory..."
-PROJECT_DIR="$HOME/studioTimer"
-mkdir -p $PROJECT_DIR
+echo "Setting up project directory at /var/www/html/..."
+PROJECT_DIR="/var/www/html/studioTimer"
+sudo mkdir -p $PROJECT_DIR
+sudo chown -R $USER:$USER $PROJECT_DIR
 
 # Navigate to the project directory
 cd $PROJECT_DIR
