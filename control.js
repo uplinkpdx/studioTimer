@@ -1,15 +1,10 @@
-const websocketPort = '3000';
-const wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-const websocketURL = `${wsProtocol}//%%WEBSOCKET_SERVER_IP%%:${websocketPort}`;
+const socket = new WebSocket(`ws://${window.location.hostname}:3000`);
 
-// Create WebSocket connection
-const ws = new WebSocket(websocketURL);
-
-// Send updated countdown or countup data to the WebSocket server
+// Function to send WebSocket updates
 function updateTimer(type, data) {
     const update = {};
     update[type] = data;
-    ws.send(JSON.stringify(update)); // Use ws instead of socket
+    socket.send(JSON.stringify(update));
     console.log('Sent message:', update);
 }
 
@@ -45,23 +40,15 @@ function pauseCountup() {
 }
 
 function resetCountup() {
-    // Send reset command but keep status as 'resetAndRun' to reset to 00:00 and keep running
     updateTimer('countup', { status: 'resetAndRun' });
 }
 
-// WebSocket event listeners
-ws.onopen = () => {
-  console.log('WebSocket connection opened.');
+// WebSocket connection opened
+socket.onopen = function() {
+    console.log('WebSocket connection established from control page');
 };
 
-ws.onmessage = (event) => {
-  console.log('Message from server:', event.data);
-};
-
-ws.onclose = () => {
-  console.log('WebSocket connection closed.');
-};
-
-ws.onerror = (error) => {
-  console.error('WebSocket error:', error);
+// WebSocket error handling
+socket.onerror = function(error) {
+    console.error('WebSocket error:', error);
 };
