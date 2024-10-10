@@ -4,6 +4,46 @@
 echo "Updating system..."
 sudo apt-get update -y && sudo apt-get upgrade -y
 
+# Function to display a list of common timezones
+function show_common_timezones() {
+    echo "Please choose a timezone from the following common options:"
+    echo "1) America/New_York (Eastern Time)"
+    echo "2) America/Chicago (Central Time)"
+    echo "3) America/Denver (Mountain Time)"
+    echo "4) America/Los_Angeles (Pacific Time)"
+    echo "5) Europe/London"
+    echo "6) Europe/Berlin"
+    echo "7) UTC"
+    echo "8) Enter manually (you can see a full list using 'timedatectl list-timezones')"
+    echo
+}
+
+# Prompt for a timezone
+show_common_timezones
+read -p "Enter the number corresponding to your timezone (or enter manually): " tz_choice
+
+case $tz_choice in
+    1) TIMEZONE="America/New_York" ;;
+    2) TIMEZONE="America/Chicago" ;;
+    3) TIMEZONE="America/Denver" ;;
+    4) TIMEZONE="America/Los_Angeles" ;;
+    5) TIMEZONE="Europe/London" ;;
+    6) TIMEZONE="Europe/Berlin" ;;
+    7) TIMEZONE="UTC" ;;
+    8) 
+        read -p "Enter your timezone manually (use 'timedatectl list-timezones' to see all options): " TIMEZONE ;;
+    *)
+        echo "Invalid option. Defaulting to UTC."
+        TIMEZONE="UTC" ;;
+esac
+
+# Set the timezone
+echo "Setting timezone to $TIMEZONE..."
+sudo timedatectl set-timezone "$TIMEZONE"
+
+# Confirm the timezone is set
+timedatectl
+
 # Prompt for a hostname (default to 'timer-pi' if no input)
 read -p "Enter a unique hostname for this Raspberry Pi (default: timer-pi): " HOSTNAME
 HOSTNAME=${HOSTNAME:-timer-pi}
