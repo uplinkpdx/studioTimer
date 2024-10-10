@@ -152,6 +152,12 @@ sudo systemctl start http-server.service
 IP_ADDRESS=$(hostname -I | awk '{print $1}')
 HOSTNAME=$(hostname)
 
+# Get the Raspberry Pi's IP address
+IP_ADDRESS=$(hostname -I | awk '{print $1}')
+
+# Inject IP address into display.html
+sudo sed -i "s/YOUR_IP_ADDRESS/$IP_ADDRESS/g" /var/www/html/studioTimer/display.html
+
 # Set up the browser to open the display page in fullscreen on boot
 echo "Setting up Chromium to autostart display page in fullscreen on boot..."
 AUTOSTART_DIR="$HOME/.config/lxsession/LXDE-pi"
