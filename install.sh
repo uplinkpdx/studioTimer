@@ -26,18 +26,101 @@ fi
 echo "Current /etc/hosts content:"
 cat /etc/hosts
 
-#Download Part 2 of the install
-echo "Downloading the next step..."
-wait 3
-wget https://raw.githubusercontent.com/uplinkpdx/studioTimer/main/install.sh
+# Ensure avahi-daemon is installed and running for mDNS
+echo "Installing avahi-daemon for mDNS (hostname.local resolution)..."
+sudo apt-get install -y avahi-daemon
+sudo systemctl enable avahi-daemon
+sudo systemctl start avahi-daemon
 
-# Schedule the second script to run after reboot using cron
-echo "Scheduling the second script to run after reboot..."
-sudo crontab -l > mycron
-echo "@reboot /bin/bash /var/www/html/install_studio_timer.sh" >> mycron
-sudo crontab mycron
-rm mycron
+# Install Node.js and npm
+echo "Installing Node.js and npm..."
+sudo apt-get install -y nodejs npm
 
-# Reboot the system to apply the hostname changes
-echo "Rebooting the system to apply hostname changes..."
-sudo reboot
+# Install Chromium browser if not installed
+echo "Installing Chromium browser..."
+sudo apt-get install -y chromium-browser
+
+# Create a directory for the project
+echo "Setting up project directory at /var/www/html/..."
+PROJECT_DIR="/var/www/html/studioTimer"
+sudo mkdir -p $PROJECT_DIR
+sudo chown -R $USER:$USER $PROJECT_DIR
+
+# Navigate to the project directory
+cd $PROJECT_DIR
+
+# Clone the GitHub repository
+echo "Cloning the project from GitHub..."
+git clone https://github.com/uplinkpdx/studioTimer.git .
+
+# Install project dependencies (e.g., for the WebSocket server)
+echo "Installing project dependencies..."
+npm install
+
+# Install http-server globally to serve static files
+echo "Installing http-server globally..."
+sudo npm install -g http-server
+
+# Create the WebSocket systemd service
+echo "Creating systemd service for WebSocket server..."
+sudo bash -c 'cat <<EOF > /etc/systemd/system/websocket-server.service
+[Unit]
+Description=Node.js WebSocket Server
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/node /var/www/html/studioTimer/websocket-server.js
+WorkingDirectory=/var/www/html/studioTimer
+Restart=always
+User=root
+Environment=PATH=/usr/bin:/usr/local/bin
+Environment=NODE_ENV=production
+
+[Install]
+WantedBy=multi-user.target
+EOF'
+
+# Enable and start the WebSocket service
+sudo systemctl daemon-reload
+sudo systemctl enable websocket-server.service
+sudo systemctl start websocket-server.service
+
+# Create the http-server systemd service
+echo "Creating systemd service for http-server..."
+sudo bash -c 'cat <<EOF > /etc/systemd/system/http-server.service
+[Unit]
+Description=HTTP Server for Serving Static Files
+After=network.target
+
+[Service]
+ExecStart=/usr/local/bin/http-server -p 8080 -c-1 /var/www/html/studioTimer
+WorkingDirectory=/var/www/html/studioTimer
+Restart=always
+User=root
+Environment=PATH=/usr/local/bin:/usr/bin:/bin
+
+[Install]
+WantedBy=multi-user.target
+EOF'
+
+# Enable and start the http-server service
+sudo systemctl daemon-reload
+sudo systemctl enable http-server.service
+sudo systemctl start http-server.service
+
+# Get the Raspberry Pi's IP address and hostname
+IP_ADDRESS=$(hostname -I | awk '{print $1}')
+HOSTNAME=$(hostname)
+
+# Set up the browser to open the display page in fullscreen on boot
+echo "Setting up Chromium to autostart display page in fullscreen on boot..."
+AUTOSTART_DIR="$HOME/.config/lxsession/LXDE-pi"
+mkdir -p $AUTOSTART_DIR
+echo "@chromium-browser --noerrdialogs --disable-infobars --kiosk http://$HOSTNAME.local:8080/display.html" > $AUTOSTART_DIR/autostart
+
+# Output the URL for the control and display pages
+echo "=============================================="
+echo "Installation complete! You can access the control and display pages at:"
+echo "Control Page: http://$HOSTNAME.local:8080/control.html"
+echo "Display Page: http://$HOSTNAME.local:8080/display.html"
+echo "=============================================="
