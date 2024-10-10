@@ -109,7 +109,7 @@ Description=Node.js WebSocket Server
 After=network.target
 
 [Service]
-ExecStart=/usr/bin/node /var/www/html/studioTimer/websocket-server.js
+ExecStart=/usr/bin/node /var/www/html/studioTimer/server.js
 WorkingDirectory=/var/www/html/studioTimer
 Restart=always
 User=root
