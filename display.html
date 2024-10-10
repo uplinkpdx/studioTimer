@@ -27,9 +27,11 @@
         <div id="current-time" class="time-display">12:00:00 PM</div>
     </div>
     
-    <!-- Div to display the QR code -->
+    <!-- Div to display the QR code and URL -->
     <div id="qr-container" style="position: fixed; bottom: 10px; right: 10px; color: darkgrey; font-size: 14px;">
         <div id="qrcode-ip" style="margin-bottom: 10px;"></div>
+        <!-- Display the control page URL in text form -->
+        <p id="control-url-text" style="color: darkgrey; margin-top: 10px;"></p>
     </div>
 
     <script>
@@ -39,7 +41,7 @@
                 text: text,
                 width: 128,  // Width of the QR code
                 height: 128, // Height of the QR code
-                colorDark: "#d3d3d3",  // QR code color (white)
+                colorDark: "#ffffff",  // QR code color (white)
                 colorLight: "#000000",  // Background color (black)
                 correctLevel: QRCode.CorrectLevel.H
             });
@@ -50,6 +52,9 @@
 
         // Generate QR code for the IP address
         generateQRCode("qrcode-ip", ipAddress);
+
+        // Display the control page URL in text form (dark grey color)
+        document.getElementById("control-url-text").innerText = "Control Page: " + ipAddress;
     </script>
 
     <script src="display.js"></script>
