@@ -26,6 +26,11 @@ fi
 echo "Current /etc/hosts content:"
 cat /etc/hosts
 
+#Download Part 2 of the install
+echo "Downloading the next step..."
+wait 3
+wget https://raw.githubusercontent.com/uplinkpdx/studioTimer/main/install.sh
+
 # Schedule the second script to run after reboot using cron
 echo "Scheduling the second script to run after reboot..."
 sudo crontab -l > mycron
