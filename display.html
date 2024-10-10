@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,6 +6,7 @@
     <title>Studio Timer Display Page</title>
     <link rel="icon" href="favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="display-style.css">
+    <script src="js/qrcode.min.js"></script> <!-- Make sure you have QRCode.js -->
 </head>
 <body>
     <div class="container">
@@ -19,14 +19,38 @@
         <!-- Bottom Bar -->
         <div id="countdown-bar-bottom" class="bar"></div>
         
-<div id="countup-timer">
-    00:00:00  <!-- This will display hours:minutes:seconds -->
-</div>
+        <div id="countup-timer">
+            00:00:00  <!-- This will display hours:minutes:seconds -->
+        </div>
 
         <!-- Real-time Clock Display -->
         <div id="current-time" class="time-display">12:00:00 PM</div>
-
     </div>
+    
+    <!-- Div to display the QR code -->
+    <div id="qr-container" style="position: fixed; bottom: 10px; right: 10px; color: darkgrey; font-size: 14px;">
+        <div id="qrcode-ip" style="margin-bottom: 10px;"></div>
+    </div>
+
+    <script>
+        // Function to generate QR code
+        function generateQRCode(id, text) {
+            new QRCode(document.getElementById(id), {
+                text: text,
+                width: 128,  // Width of the QR code
+                height: 128, // Height of the QR code
+                colorDark: "#d3d3d3",  // QR code color (white)
+                colorLight: "#000000",  // Background color (black)
+                correctLevel: QRCode.CorrectLevel.H
+            });
+        }
+
+        // URL for the control page using IP address
+        var ipAddress = "http://YOUR_IP_ADDRESS:8080/control.html";  // Placeholder for IP address
+
+        // Generate QR code for the IP address
+        generateQRCode("qrcode-ip", ipAddress);
+    </script>
 
     <script src="display.js"></script>
 </body>
